@@ -88,6 +88,8 @@ def get_api_answer(timestamp):
             headers=HEADERS,
             params={'from_date': timestamp}
         )
+        logging.info(f'Попытка отправки запроса к эндпоинту {ENDPOINT}'
+                     f' с параметрами: "from_date": {timestamp}')
     except requests.exceptions.RequestException as e:
         message = f'Эндпоинт Практикума недоступен. Причина: {e}'
         logging.error(message)
@@ -98,6 +100,7 @@ def get_api_answer(timestamp):
         logging.error(message)
         raise _.UnexpectedHTTPStatusError(message)
     try:
+        logging.info('Ответ на запрос API от эндпоинта получен.')
         return response.json()
     except TypeError as e:
         message = f'Формат не соответствует ожидаемому: {e}'
@@ -128,7 +131,7 @@ def parse_status(homework):
     """
     Парсим статус проверки.
     Кроме того, преобразуем полученный ответ
-    от сервера из JSON в читаемый вид.
+    от сервера из JSON к Python.
     """
     homework_name = homework.get('homework_name')
     homework_status = homework.get('status')
@@ -150,6 +153,7 @@ def main():
     timestamp = int(time.time())
     while True:
         try:
+            logging.info('Бот начал работу.')
             response = get_api_answer(timestamp)
             homework = check_response(response)
             if not homework:
