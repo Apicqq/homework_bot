@@ -144,8 +144,8 @@ def parse_status(homework):
 def main():
     """Основная логика работы бота."""
     if not check_tokens():
-        raise ValueError('Ошибка глобальной переменной.'
-                         ' Выполнение программы остановлено.')
+        raise _.TokenViolationError('Ошибка глобальной переменной.'
+                                    ' Выполнение программы остановлено.')
     bot = telegram.Bot(token=TELEGRAM_TOKEN)
     timestamp = int(time.time())
     while True:

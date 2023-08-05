@@ -11,3 +11,8 @@ class EndpointError(Exception):
 class UnexpectedHTTPStatusError(Exception):
     """Неожиданный HTTP статус."""
     pass
+
+
+class TokenViolationError(Exception):
+    """Ошибка при парсинге переменных окружения."""
+    pass
