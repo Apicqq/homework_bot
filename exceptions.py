@@ -3,11 +3,6 @@ class FormatError(Exception):
     pass
 
 
-class EndpointError(Exception):
-    """Ошибка на стороне API-сервиса."""
-    pass
-
-
 class UnexpectedHTTPStatusError(Exception):
     """Неожиданный HTTP статус."""
     pass
@@ -15,4 +10,9 @@ class UnexpectedHTTPStatusError(Exception):
 
 class TokenViolationError(Exception):
     """Ошибка при парсинге переменных окружения."""
+    pass
+
+
+class EmptyAPIResponse(Exception):
+    """Получен пустой ответ от API-сервера."""
     pass
