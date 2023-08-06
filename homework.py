@@ -2,6 +2,7 @@ import logging
 import os
 import sys
 import time
+from json import JSONDecodeError
 from http import HTTPStatus
 
 import requests
@@ -56,14 +57,14 @@ def check_tokens():
     Если отсутствует хотя бы одна — программа останавливается,
     далее продолжать работу бота нет смысла.
     """
-    values = (PRACTICUM_TOKEN, TELEGRAM_TOKEN, TELEGRAM_CHAT_ID)
+    values = (
+        ('PRACTICUM_TOKEN', PRACTICUM_TOKEN),
+        ('TELEGRAM_TOKEN', TELEGRAM_TOKEN),
+        ('TELEGRAM_CHAT_ID', TELEGRAM_CHAT_ID)
+    )
     value_is_present = True
-    for key in values:
-        if key not in values:
-            logger.critical(f'Переменная окружения {key} отсутствует.'
-                            ' Выполнение программы остановлено.')
-            value_is_present = False
-        elif not key:
+    for key, value in values:
+        if not value:
             logger.critical(f'Переменная окружения {key} не указана.'
                             ' Выполнение программы остановлено.')
             value_is_present = False
@@ -97,7 +98,7 @@ def get_api_answer(timestamp):
         response = requests.get(**all_params)
         logger.debug('Запрос к эндпоинту успешно отправлен.')
     except requests.exceptions.RequestException:
-        raise ConnectionError((CONNECTION_ERROR.format(**all_params)))
+        raise ConnectionError(CONNECTION_ERROR.format(**all_params))
     if response.status_code != HTTPStatus.OK:
         raise UnexpectedHTTPStatusError(
             WRONG_HTTP_STATUS_ERROR.format(response.status_code)
@@ -105,7 +106,7 @@ def get_api_answer(timestamp):
     try:
         logger.debug('Ответ на запрос API от эндпоинта получен.')
         return response.json()
-    except ValueError as error:
+    except JSONDecodeError as error:
         raise FormatError(ATTRIBUTE_ERROR.format(error))
 
 
