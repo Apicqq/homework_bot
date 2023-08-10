@@ -157,8 +157,7 @@ def main():
             else:
                 current_report['output'] = 'Статус проекта не обновился.'
             if current_report != previous_report:
-                send_message(bot, current_report['output'])
-                if send_message:
+                if send_message(bot, current_report['output']):
                     previous_report = current_report.copy()
                     timestamp = response.get('current_date', timestamp)
             else:
